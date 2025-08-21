@@ -1,4 +1,4 @@
-package io.github.vlodo_o.habit_tracker
+package io.github.vlodo_o.habit_tracker.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
