@@ -1,11 +1,10 @@
 package io.github.vlodo_o.habit_tracker.domain
 
 import io.github.vlodo_o.habit_tracker.domain.models.Habit
-import kotlinx.coroutines.flow.Flow
 
 interface HabitRepository {
-    fun addHabit(habit: Habit)
-    fun getAllHabits(): Flow<List<Habit>>
-    fun deleteHabit()
-    fun editHabit()
+    suspend fun getHabits(): List<Habit>
+    suspend fun addHabit(habit: Habit)
+    suspend fun updateHabit(habit: Habit)
+    suspend fun deleteHabit(habit: Habit)
 }
