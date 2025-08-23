@@ -13,6 +13,9 @@ interface HabitDao {
     @Query("SELECT * FROM habits")
     suspend fun getAllHabits(): List<HabitEntity>
 
+    @Query("SELECT * FROM habits WHERE id = :id")
+    suspend fun getHabit(id: Long): HabitEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertHabit(habit: HabitEntity)
 

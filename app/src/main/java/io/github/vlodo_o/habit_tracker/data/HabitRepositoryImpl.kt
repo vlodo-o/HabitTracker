@@ -10,9 +10,14 @@ class HabitRepositoryImpl(
     private val appDatabase: AppDatabase,
 ): HabitRepository {
 
-    override suspend fun getHabits(): List<Habit> {
+    override suspend fun getHabitsList(): List<Habit> {
         val habitEntities = appDatabase.HabitDao().getAllHabits()
         return habitEntities.map { it.toDomain() }
+    }
+
+    override suspend fun getHabit(habitId: Long): Habit {
+        val habitEntity = appDatabase.HabitDao().getHabit(habitId)
+        return habitEntity.toDomain()
     }
 
     override suspend fun addHabit(habit: Habit) {

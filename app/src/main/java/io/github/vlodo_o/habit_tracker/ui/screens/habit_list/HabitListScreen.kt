@@ -1,5 +1,6 @@
 package io.github.vlodo_o.habit_tracker.ui.screens.habit_list
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,16 +26,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.github.vlodo_o.habit_tracker.ui.theme.HabitTrackerTheme
 import org.koin.androidx.compose.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HabitListScreen(viewModel: HabitListViewModel = koinViewModel()) {
+fun HabitListScreen(
+    viewModel: HabitListViewModel = koinViewModel(),
+    onAddClick: () -> Unit,
+    onHabitClick: (Long) -> Unit
+) {
 
     val state by viewModel.uiState.collectAsState()
 
@@ -79,7 +82,9 @@ fun HabitListScreen(viewModel: HabitListViewModel = koinViewModel()) {
                 items(state.habits) { habit ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onHabitClick(habit.id) }
                     ) {
                         Checkbox(
                             checked = habit.isDone,
@@ -96,19 +101,11 @@ fun HabitListScreen(viewModel: HabitListViewModel = koinViewModel()) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { viewModel.handleIntent(HabitListIntent.AddHabitClicked("Привычка ${state.habits.size}")) },
+                onClick = { onAddClick() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("+ Добавить привычку")
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HabitListPreview() {
-    HabitTrackerTheme {
-        HabitListScreen()
     }
 }

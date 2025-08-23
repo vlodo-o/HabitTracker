@@ -2,9 +2,9 @@ package io.github.vlodo_o.habit_tracker.ui.screens.habit_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.github.vlodo_o.habit_tracker.domain.habits.usecase.AddHabitUseCase
-import io.github.vlodo_o.habit_tracker.domain.habits.usecase.GetHabitsUseCase
-import io.github.vlodo_o.habit_tracker.domain.habits.usecase.ToggleHabitUseCase
+import io.github.vlodo_o.habit_tracker.domain.usecase.CreateHabitUseCase
+import io.github.vlodo_o.habit_tracker.domain.usecase.GetHabitsListUseCase
+import io.github.vlodo_o.habit_tracker.domain.usecase.ToggleHabitUseCase
 import io.github.vlodo_o.habit_tracker.domain.models.Habit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,9 +15,9 @@ import java.util.Date
 import java.util.Locale
 
 class HabitListViewModel(
-    private val getHabitsUseCase: GetHabitsUseCase,
+    private val getHabitsListUseCase: GetHabitsListUseCase,
     private val toggleHabitUseCase: ToggleHabitUseCase,
-    private val addHabitUseCase: AddHabitUseCase
+    private val createHabitUseCase: CreateHabitUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HabitListState(isLoading = true))
     val uiState: StateFlow<HabitListState> = _uiState
@@ -34,7 +34,7 @@ class HabitListViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                val habits = getHabitsUseCase()
+                val habits = getHabitsListUseCase()
                 val progress = if (habits.isNotEmpty()) {
                     habits.count { it.isDone }.toFloat() / habits.size
                 } else 0f
@@ -62,7 +62,7 @@ class HabitListViewModel(
 
     private fun addHabit(name: String) {
         viewModelScope.launch {
-            addHabitUseCase(name)
+            createHabitUseCase(name)
             loadHabits()
         }
     }
